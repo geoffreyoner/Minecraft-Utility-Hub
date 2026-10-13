@@ -1,0 +1,179 @@
+{
+  "presets": [
+    {
+      "id": "extreme-fps-lowend",
+      "name": {
+        "id": "Boost FPS Ekstrem (PC Kentang)",
+        "en": "Extreme FPS Boost / Low-End PC"
+      },
+      "description": {
+        "id": "Racikan mod paling ringan untuk PC kentang, memangkas RAM dan mendongkrak FPS habis-habisan.",
+        "en": "Lightweight mod setup for low-end PCs to minimize RAM usage and maximize FPS."
+      },
+      "icon": "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'><polygon points='13 2 3 14 12 14 11 22 21 10 12 10 13 2'/></svg>",
+      "recommended_loader": "fabric",
+      "mods": [
+        { "name": "Sodium", "slug": "sodium" },
+        { "name": "Lithium", "slug": "lithium" },
+        { "name": "FerriteCore", "slug": "ferrite-core" },
+        { "name": "Krypton", "slug": "krypton" },
+        { "name": "Entity Culling", "slug": "entityculling" },
+        { "name": "Dynamic FPS", "slug": "dynamic-fps" },
+        { "name": "Fabric API", "slug": "fabric-api" }
+      ]
+    },
+    {
+      "id": "hardcore-pvp-tiertest",
+      "name": {
+        "id": "PvP Hardcore & Uji Tier",
+        "en": "Hardcore PvP & Tiertesting"
+      },
+      "description": {
+        "id": "Fokus optimasi FPS, hitreg, dan HUD minimalis buat latihan PvP kompetitif dan tier test.",
+        "en": "Optimized for FPS, hitreg, and minimal HUD for competitive PvP training and tier testing."
+      },
+      "icon": "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'><path d='M14.5 17.5L3 6V3h3l11.5 11.5'/><line x1='13' y1='19' x2='19' y2='13'/><line x1='16' y1='16' x2='20' y2='20'/><line x1='19' y1='21' x2='21' y2='19'/></svg>",
+      "recommended_loader": "fabric",
+      "mods": [
+        { "name": "Sodium", "slug": "sodium" },
+        { "name": "Lithium", "slug": "lithium" },
+        { "name": "Krypton", "slug": "krypton" },
+        { "name": "ImmediatelyFast", "slug": "immediatelyfast" },
+        { "name": "Not Enough Animations", "slug": "not-enough-animations" },
+        { "name": "Entity Culling", "slug": "entityculling" },
+        { "name": "Zoomify", "slug": "zoomify" },
+        { "name": "Fabric API", "slug": "fabric-api" }
+      ]
+    },
+    {
+      "id": "survival-vanilla-plus-qol",
+      "name": {
+        "id": "Survival Vanilla+ (QoL & Mini-map)",
+        "en": "Survival Vanilla+ (QoL & Mini-map)"
+      },
+      "description": {
+        "id": "Mod Quality of Life andalan biar sesi survival bareng teman makin nyaman dan efisien.",
+        "en": "Essential Quality of Life mods to make multiplayer survival smoother and more efficient."
+      },
+      "icon": "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'><path d='M11 20A7 7 0 0 1 9.8 6.1C15.5 5 17 4.48 19 2c1 2 2 4.18 2 8 0 5.5-4.78 10-10 10Z'/><path d='M2 21c0-3 1.85-5.36 5.08-6C9.5 14.52 12 13 13 12'/></svg>",
+      "recommended_loader": "fabric",
+      "mods": [
+        { "name": "Sodium", "slug": "sodium" },
+        { "name": "Xaero's Minimap", "slug": "xaeros-minimap" },
+        { "name": "Xaero's World Map", "slug": "xaeros-world-map" },
+        { "name": "Roughly Enough Items (REI)", "slug": "rei" },
+        { "name": "Jade", "slug": "jade" },
+        { "name": "AppleSkin", "slug": "appleskin" },
+        { "name": "Fabric API", "slug": "fabric-api" }
+      ]
+    },
+    {
+      "id": "builder-shader-enthusiast",
+      "name": {
+        "id": "Builder & Penggemar Shader",
+        "en": "Builder & Shader Enthusiast"
+      },
+      "description": {
+        "id": "Perpaduan shader Iris dan mod visual biar hasil build makin mentereng dan sinematik.",
+        "en": "Iris shaders and visual mods combined to make your builds look stunning and cinematic."
+      },
+      "icon": "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'><circle cx='13.5' cy='6.5' r='.5'/><circle cx='17.5' cy='10.5' r='.5'/><circle cx='8.5' cy='7.5' r='.5'/><circle cx='6.5' cy='12.5' r='.5'/><path d='M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10c.926 0 1.648-.746 1.648-1.688 0-.437-.18-.835-.437-1.125-.29-.289-.438-.652-.438-1.125a1.64 1.64 0 0 1 1.668-1.668h1.996c3.051 0 5.555-2.503 5.555-5.554C21.965 6.012 17.461 2 12 2z'/></svg>",
+      "recommended_loader": "fabric",
+      "mods": [
+        { "name": "Iris Shaders", "slug": "iris" },
+        { "name": "Sodium", "slug": "sodium" },
+        { "name": "Continuity", "slug": "continuity" },
+        { "name": "3D Skin Layers", "slug": "3dskinlayers" },
+        { "name": "Not Enough Animations", "slug": "not-enough-animations" },
+        { "name": "Fabric API", "slug": "fabric-api" }
+      ]
+    },
+    {
+      "id": "content-creator-recording",
+      "name": {
+        "id": "Pembuat Konten & Rekaman",
+        "en": "Content Creator & Recording"
+      },
+      "description": {
+        "id": "Perkakas wajib buat merekam gameplay sinematik dan bikin konten YouTube/TikTok.",
+        "en": "Essential tools for recording cinematic gameplay and creating YouTube/TikTok content."
+      },
+      "icon": "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'><path d='m22 8-6 4 6 4V8Z'/><rect width='14' height='12' x='2' y='6' rx='2' ry='2'/></svg>",
+      "recommended_loader": "fabric",
+      "mods": [
+        { "name": "Replay Mod", "slug": "replaymod" },
+        { "name": "Sodium", "slug": "sodium" },
+        { "name": "Iris Shaders", "slug": "iris" },
+        { "name": "ImmediatelyFast", "slug": "immediatelyfast" },
+        { "name": "FreeCam", "slug": "freecam" },
+        { "name": "3D Skin Layers", "slug": "3dskinlayers" },
+        { "name": "Fabric API", "slug": "fabric-api" }
+      ]
+    },
+    {
+      "id": "technical-redstone",
+      "name": {
+        "id": "Teknikal & Redstone",
+        "en": "Technical & Redstone"
+      },
+      "description": {
+        "id": "Perkakas teknikal seperti schematic, HUD info, dan tweak client buat proyek redstone.",
+        "en": "Technical utilities like schematics, HUD info, and client tweaks for redstone projects."
+      },
+      "icon": "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'><rect width='16' height='16' x='4' y='4' rx='2'/><rect width='6' height='6' x='9' y='9'/><path d='M15 2v2'/><path d='M15 20v2'/><path d='M2 15h2'/><path d='M2 9h2'/><path d='M20 15h2'/><path d='M20 9h2'/><path d='M9 2v2'/><path d='M9 20v2'/></svg>",
+      "recommended_loader": "fabric",
+      "mods": [
+        { "name": "Litematica", "slug": "litematica" },
+        { "name": "MiniHUD", "slug": "minihud" },
+        { "name": "Tweakeroo", "slug": "tweakeroo" },
+        { "name": "MaLiLib", "slug": "malilib" },
+        { "name": "Cloth Config API", "slug": "cloth-config" },
+        { "name": "Fabric API", "slug": "fabric-api" }
+      ]
+    },
+    {
+      "id": "rpg-exploration",
+      "name": {
+        "id": "RPG & Eksplorasi",
+        "en": "RPG & Exploration"
+      },
+      "description": {
+        "id": "Mod eksplorasi minimalis biar perjalanan jauh terasa lebih hidup dan efisien.",
+        "en": "Minimalist exploration mods to make long journeys feel more alive and efficient."
+      },
+      "icon": "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'><circle cx='12' cy='12' r='10'/><polygon points='16.24 7.76 14.12 14.12 7.76 16.24 9.88 9.88 16.24 7.76'/></svg>",
+      "recommended_loader": "fabric",
+      "mods": [
+        { "name": "Xaero's Minimap", "slug": "xaeros-minimap" },
+        { "name": "Xaero's World Map", "slug": "xaeros-world-map" },
+        { "name": "Waystones", "slug": "waystones" },
+        { "name": "Balm", "slug": "balm" },
+        { "name": "Distant Horizons", "slug": "distanthorizons" },
+        { "name": "Terralith", "slug": "terralith" },
+        { "name": "Fabric API", "slug": "fabric-api" }
+      ]
+    },
+    {
+      "id": "bedwars-minigames",
+      "name": {
+        "id": "Spesifikasi Bedwars / Minigame",
+        "en": "Bedwars / Minigames Spec"
+      },
+      "description": {
+        "id": "Setup ringan dengan HUD informatif dan render cepat, pas buat minigame kompetitif.",
+        "en": "Lightweight setup with informative HUD and fast rendering, ideal for competitive minigames."
+      },
+      "icon": "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'><path d='M2 4v16'/><path d='M2 8h18a2 2 0 0 1 2 2v10'/><path d='M2 17h20'/><path d='M6 8v9'/></svg>",
+      "recommended_loader": "fabric",
+      "mods": [
+        { "name": "Sodium", "slug": "sodium" },
+        { "name": "Lithium", "slug": "lithium" },
+        { "name": "ImmediatelyFast", "slug": "immediatelyfast" },
+        { "name": "Not Enough Animations", "slug": "not-enough-animations" },
+        { "name": "Dynamic FPS", "slug": "dynamic-fps" },
+        { "name": "Jade", "slug": "jade" },
+        { "name": "Fabric API", "slug": "fabric-api" }
+      ]
+    }
+  ]
+}

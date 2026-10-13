@@ -1,0 +1,32 @@
+{
+  "ITEM_ICONS": {
+    "sword": "https://assets.mcasset.cloud/26.2/assets/minecraft/textures/item/netherite_sword.png",
+    "vanilla": "https://assets.mcasset.cloud/26.2/assets/minecraft/textures/item/end_crystal.png",
+    "axe": "https://assets.mcasset.cloud/26.2/assets/minecraft/textures/item/netherite_axe.png",
+    "uhc": "https://assets.mcasset.cloud/26.2/assets/minecraft/textures/gui/sprites/hud/heart/withered_full.png",
+    "pot": "https://assets.mcasset.cloud/26.2/assets/minecraft/textures/item/ominous_bottle.png", 
+    "neth_pot": "https://assets.mcasset.cloud/26.2/assets/minecraft/textures/item/netherite_chestplate.png",
+    "smp": "https://assets.mcasset.cloud/26.2/assets/minecraft/textures/item/ender_pearl.png",
+    "mace": "https://assets.mcasset.cloud/26.2/assets/minecraft/textures/item/mace.png",
+    "default": "https://assets.mcasset.cloud/26.2/assets/minecraft/textures/item/barrier.png"
+  },
+  "MODE_ALIASES": {
+    "nethop": "neth_pot",
+    "netherop": "neth_pot",
+    "netherite_pot": "neth_pot",
+    "nether_pot": "neth_pot",
+    "netheritepot": "neth_pot",
+    "2v2": "ltm"
+  },
+  "MODE_DISPLAY_NAMES": {
+    "neth_pot": "Netherite Pot",
+    "uhc": "UHC",
+    "smp": "SMP",
+    "pot": "Pot",
+    "axe": "Axe",
+    "sword": "Sword",
+    "vanilla": "Vanilla",
+    "mace": "Mace",
+    "ltm": "LTM (2v2)"
+  }
+}
