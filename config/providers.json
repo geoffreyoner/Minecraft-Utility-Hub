@@ -1,0 +1,22 @@
+{
+  "providers": [
+    {
+      "id": "mctiers",
+      "name": "MCTiers (mctiers.com)",
+      "url": "https://mctiers.com/api/player/{username}",
+      "referer": "https://mctiers.com/",
+      "origin": "https://mctiers.com",
+      "timeout": 8,
+      "fallback_to": null
+    },
+    {
+      "id": "pvptiers",
+      "name": "PvPTiers (pvptiers.com)",
+      "url": "https://pvptiers.com/api/player/{username}",
+      "referer": "https://pvptiers.com/",
+      "origin": "https://pvptiers.com",
+      "timeout": 8,
+      "fallback_to": "mctiers"
+    }
+  ]
+}

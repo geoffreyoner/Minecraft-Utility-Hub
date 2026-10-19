@@ -1,0 +1,343 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <meta name="theme-color" content="#0a0807">
+    <meta name="color-scheme" content="dark">
+    <title>Minecraft Utility Hub</title>
+
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; connect-src 'self' https:; img-src 'self' data: https:; script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net https://cdnjs.cloudflare.com https://challenges.cloudflare.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; frame-src https://challenges.cloudflare.com;">
+
+    <link rel="icon" type="image/png" href="img/favicon.png">
+    <link rel="stylesheet" href="style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+    <script src="https://cdn.jsdelivr.net/npm/skinview3d@3.1.0/bundles/skinview3d.bundle.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+    <script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
+</head>
+<body>
+
+    <div class="bg-glow-container">
+        <div class="glow-orb orb-twilight"></div>
+        <div class="glow-orb orb-sunset"></div>
+        <div class="bg-grid-mesh"></div>
+    </div>
+
+    <div class="wrapper">
+
+        <!-- Home — pure hero -->
+        <section id="welcomeScreen" class="app-screen">
+            <div class="home-hero">
+                <h1 class="brand-title">Minecraft Utility Hub</h1>
+                <p class="brand-subtitle">Platform utilitas all-in-one: inspeksi profil player, render skin 3D interaktif, agregasi PvP tier, dan modpack preset siap unduh.</p>
+            </div>
+        </section>
+
+        <!-- Login / Inspector -->
+        <section id="loginScreen" class="app-screen hidden">
+            <div class="panel center-panel">
+                <button class="btn-back" onclick="switchScreen('welcomeScreen')">
+                    <svg class="btn-icon" viewBox="0 0 20 20" fill="currentColor">
+                        <path fill-rule="evenodd" d="M9.707 16.707a1 1 0 01-1.414 0l-6-6a1 1 0 010-1.414l6-6a1 1 0 011.414 1.414L5.414 9H17a1 1 0 110 2H5.414l4.293 4.293a1 1 0 010 1.414z" clip-rule="evenodd"/>
+                    </svg>
+                    <span data-i18n="backBtn">Kembali</span>
+                </button>
+
+                <div class="screen-header-text">
+                    <h2 data-i18n="inspectTitle">Inspeksi Player</h2>
+                    <p data-i18n="inspectDesc">Masukkan username Minecraft Java Edition untuk memulai pemindaian.</p>
+                </div>
+
+                <div class="input-group-large">
+                    <input type="text" id="usernameInput" data-i18n-placeholder="inputPlaceholder" placeholder="Masukkan Username..." autocomplete="off" spellcheck="false">
+                    <button class="btn-primary" onclick="handleLoginAndSearch()">
+                        <span data-i18n="searchBtn">Search</span>
+                    </button>
+                </div>
+
+                <div class="cf-turnstile" data-sitekey="0x4AAAAAAE831YcVcFqyCzIa" data-theme="dark"></div>
+
+                <div id="loginStatus" class="status-msg"></div>
+            </div>
+        </section>
+
+        <!-- ModVault -->
+        <section id="modpackScreen" class="app-screen hidden">
+            <div class="panel modvault-panel">
+                <button class="btn-back" onclick="switchScreen('welcomeScreen')">
+                    <svg class="btn-icon" viewBox="0 0 20 20" fill="currentColor">
+                        <path fill-rule="evenodd" d="M9.707 16.707a1 1 0 01-1.414 0l-6-6a1 1 0 010-1.414l6-6a1 1 0 011.414 1.414L5.414 9H17a1 1 0 110 2H5.414l4.293 4.293a1 1 0 010 1.414z" clip-rule="evenodd"/>
+                    </svg>
+                    <span data-i18n="backBtn">Kembali</span>
+                </button>
+
+                <div class="screen-header-text">
+                    <h2 data-i18n="modvaultTitle">ModVault — Modpack Presets</h2>
+                    <p data-i18n="modvaultDesc">Pilih preset, sesuaikan versi & loader, lalu unduh modpack siap pakai.</p>
+                </div>
+
+                <div class="section-divider"></div>
+
+                <div class="preset-section">
+                    <span class="panel-label" data-i18n="presetSectionLabel">1. PILIH PRESET</span>
+                    <div id="presetGrid" class="preset-grid">
+                        <div class="preset-skeleton"></div>
+                        <div class="preset-skeleton"></div>
+                        <div class="preset-skeleton"></div>
+                    </div>
+                </div>
+
+                <div class="section-divider"></div>
+
+                <div class="config-section">
+                    <span class="panel-label" data-i18n="configSectionLabel">2. KONFIGURASI</span>
+                    <div class="config-form">
+                        <div class="select-group">
+                            <label for="mcVersionInput" data-i18n="mcVersionLabel">Versi Minecraft</label>
+                            <input type="text" id="mcVersionInput" class="custom-input" placeholder="Contoh: 1.20.4, 1.21.1..." autocomplete="off">
+                        </div>
+                        <div class="select-group">
+                            <label for="modLoaderSelect" data-i18n="modLoaderLabel">Mod Loader</label>
+                            <select id="modLoaderSelect">
+                                <option value="fabric">Fabric</option>
+                                <option value="forge">Forge</option>
+                                <option value="neoforge">NeoForge</option>
+                                <option value="quilt">Quilt</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="section-divider"></div>
+
+                <div class="modlist-section">
+                    <span class="panel-label" data-i18n="modlistSectionLabel">3. DAFTAR MOD</span>
+                    <div id="modBadgeList" class="modlist-badges">
+                        <span class="modlist-empty" data-i18n="modlistEmptyText">Pilih preset terlebih dahulu untuk melihat daftar mod.</span>
+                    </div>
+                </div>
+
+                <div class="section-divider"></div>
+
+                <div class="custom-mod-section">
+                    <span class="panel-label">4. MOD TAMBAHAN (CARI & KLIK)</span>
+                    <div class="search-mod-container">
+                        <input type="text" id="modSearchInput" class="custom-input" placeholder="Cari mod dari Modrinth (misal: replaymod)..." autocomplete="off">
+                        <div id="modSearchResults" class="mod-search-results hidden"></div>
+                    </div>
+                    <div id="customModBadgeList" class="modlist-badges custom-mod-badges"></div>
+                </div>
+
+                <div class="section-divider"></div>
+
+                <div class="cf-turnstile" data-sitekey="0x4AAAAAAE831YcVcFqyCzIa" data-theme="dark"></div>
+
+                <button id="downloadModpackBtn" class="btn-primary-large" onclick="handleModpackDownload()" disabled>
+                    <span id="downloadBtnText" data-i18n="downloadBtnText">Download Modpack (.zip)</span>
+                    <div id="downloadSpinner" class="btn-spinner hidden"></div>
+                </button>
+
+                <div id="modpackStatus" class="status-msg"></div>
+            </div>
+        </section>
+
+        <!-- Dashboard -->
+        <section id="dashboardScreen" class="app-screen hidden">
+            <header class="header-dashboard">
+                <button class="btn-back" onclick="switchScreen('loginScreen')">
+                    <svg class="btn-icon" viewBox="0 0 20 20" fill="currentColor">
+                        <path fill-rule="evenodd" d="M9.707 16.707a1 1 0 01-1.414 0l-6-6a1 1 0 010-1.414l6-6a1 1 0 011.414 1.414L5.414 9H17a1 1 0 110 2H5.414l4.293 4.293a1 1 0 010 1.414z" clip-rule="evenodd"/>
+                    </svg>
+                    <span data-i18n="searchOtherBtn">Cari Player Lain</span>
+                </button>
+
+                <div class="badge badge-active">
+                    <span class="badge-dot dot-active"></span>
+                    <span data-i18n="inspectingBadge">INSPECTING</span>
+                </div>
+            </header>
+
+            <main class="dashboard-grid">
+                <div class="panel skin-panel">
+                    <div class="skin-viewport-header">
+                        <span class="panel-label" data-i18n="viewportLabel">3D VIEWPORT</span>
+                    </div>
+                    <div class="render-box">
+                        <div class="render-aura"></div>
+                        <canvas id="skinCanvas"></canvas>
+                    </div>
+                    <span class="viewer-hint"></span>
+                    <div class="viewer-controls">
+                        <button id="autoRotateBtn" class="btn-viewer-toggle">
+                            <svg class="btn-icon" viewBox="0 0 20 20" fill="currentColor">
+                                <path fill-rule="evenodd" d="M15.312 11.424a5.5 5.5 0 01-9.201 2.466l-.312-.311h2.433a.75.75 0 000-1.5H3.989a.75.75 0 00-.75.75v4.242a.75.75 0 001.5 0v-2.43l.31.31a7 7 0 0011.712-3.138.75.75 0 00-1.449-.39zm1.23-3.723a.75.75 0 00.219-.53V2.929a.75.75 0 00-1.5 0V5.36l-.31-.31A7 7 0 003.239 8.188a.75.75 0 101.448.389A5.5 5.5 0 0113.89 6.11l.311.311h-2.432a.75.75 0 000 1.5h4.243a.75.75 0 00.53-.219z" clip-rule="evenodd"/>
+                            </svg>
+                            <span data-i18n="autoRotateBtn">Auto Rotate</span>
+                        </button>
+                        <button id="resetViewBtn" class="btn-viewer-toggle">
+                            <svg class="btn-icon" viewBox="0 0 20 20" fill="currentColor">
+                                <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm.75-11.25a.75.75 0 00-1.5 0v3.69L7.03 9.22a.75.75 0 10-1.06 1.06l2.5 2.5a.75.75 0 001.06 0l2.5-2.5a.75.75 0 10-1.06-1.06l-1.22 1.22V6.75z" clip-rule="evenodd"/>
+                            </svg>
+                            <span data-i18n="resetViewBtn">Reset View</span>
+                        </button>
+                    </div>
+                </div>
+
+                <div class="panel info-panel">
+                    <div class="meta-header">
+                        <div>
+                            <span class="panel-label" data-i18n="playerIdentityLabel">PLAYER IDENTITY</span>
+                            <h2 id="playerName">--</h2>
+                        </div>
+                        <div class="uuid-wrapper">
+                            <button id="playerUuid" class="uuid-tag" title="Klik untuk menyalin UUID">
+                                <svg class="copy-icon" viewBox="0 0 20 20" fill="currentColor">
+                                    <path d="M8 3a1 1 0 011-1h2a1 1 0 110 2H9a1 1 0 01-1-1z"/>
+                                    <path d="M6 3a2 2 0 00-2 2v11a2 2 0 002 2h8a2 2 0 002-2V5a2 2 0 00-2-2 3 3 0 01-3 3H9a3 3 0 01-3-3z"/>
+                                </svg>
+                                <span id="uuidText">UUID: --</span>
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="section-divider"></div>
+
+                    <div class="tier-section">
+                        <div class="tier-section-header">
+                            <div>
+                                <h3 data-i18n="tierSectionTitle">PVP TIER RANKINGS</h3>
+                                <p class="section-subtext" data-i18n="tierSectionSub">Agregasi ranking tier dari jaringan kompetitif.</p>
+                            </div>
+                            <label class="toggle-switch" title="Tampilkan / sembunyikan tier">
+                                <input type="checkbox" id="tierToggle" aria-label="Tampilkan PvP tier rankings">
+                                <span class="toggle-slider"></span>
+                            </label>
+                        </div>
+                        <div id="tierProviders" class="tier-providers"></div>
+                    </div>
+
+                    <div class="section-divider"></div>
+
+                    <div class="assets-section">
+                        <h3 data-i18n="directAssetsTitle">DIRECT ASSETS</h3>
+                        <div class="asset-links">
+                            <a id="headAvatarLink" href="" target="_blank" rel="noopener noreferrer" class="link-item">
+                                <span data-i18n="headAvatarText">Head Avatar</span>
+                                <svg class="external-icon" viewBox="0 0 20 20" fill="currentColor">
+                                    <path d="M11 3a1 1 0 100 2h2.586l-6.293 6.293a1 1 0 101.414 1.414L15 6.414V9a1 1 0 102 0V4a1 1 0 00-1-1h-5z"/>
+                                    <path d="M5 5a2 2 0 00-2 2v8a2 2 0 002 2h8a2 2 0 002-2v-3a1 1 0 10-2 0v3H5V7h3a1 1 0 000-2H5z"/>
+                                </svg>
+                            </a>
+                            <a id="rawSkinLink" href="" target="_blank" rel="noopener noreferrer" class="link-item">
+                                <span data-i18n="rawTextureText">Raw Texture</span>
+                                <svg class="external-icon" viewBox="0 0 20 20" fill="currentColor">
+                                    <path d="M11 3a1 1 0 100 2h2.586l-6.293 6.293a1 1 0 101.414 1.414L15 6.414V9a1 1 0 102 0V4a1 1 0 00-1-1h-5z"/>
+                                    <path d="M5 5a2 2 0 00-2 2v8a2 2 0 002 2h8a2 2 0 002-2v-3a1 1 0 10-2 0v3H5V7h3a1 1 0 000-2H5z"/>
+                                </svg>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </main>
+        </section>
+
+        <!-- Footer -->
+        <footer class="app-footer">
+            <p>&copy; 2026 <strong>Minecraft Utility Hub</strong></p>
+        </footer>
+    </div>
+
+    <!-- Nav fixed bawah -->
+    <nav class="muh-nav" aria-label="Navigasi utama">
+        <a href="/" class="muh-nav-brand" onclick="event.preventDefault(); switchScreen('welcomeScreen'); return false;" aria-label="Home">
+            <svg viewBox="0 0 32 32" width="24" height="24" aria-hidden="true">
+                <defs>
+                    <linearGradient id="muhBrandGrad" x1="0" y1="0" x2="1" y2="1">
+                        <stop offset="0" stop-color="#f97316"/>
+                        <stop offset="1" stop-color="#f5b942"/>
+                    </linearGradient>
+                </defs>
+                <rect width="32" height="32" rx="8" fill="url(#muhBrandGrad)"/>
+                <text x="16" y="23" font-size="19" font-weight="700" text-anchor="middle" fill="#0a0807" font-family="Plus Jakarta Sans, sans-serif">M</text>
+            </svg>
+        </a>
+
+        <div class="muh-nav-items">
+            <button type="button" class="muh-nav-item" data-nav="loginScreen" onclick="switchScreen('loginScreen')" title="Player Inspector" aria-label="Player Inspector">
+                <svg viewBox="0 0 24 24" aria-hidden="true">
+                    <circle cx="12" cy="8" r="4"/>
+                    <path d="M4 21v-1a6 6 0 0 1 6-6h4a6 6 0 0 1 6 6v1"/>
+                </svg>
+                <span class="nav-label">Inspector</span>
+            </button>
+
+            <button type="button" class="muh-nav-item" data-nav="modpackScreen" onclick="switchScreen('modpackScreen')" title="ModVault" aria-label="ModVault">
+                <svg viewBox="0 0 24 24" aria-hidden="true">
+                    <path d="M21 8 12 3 3 8v8l9 5 9-5V8z"/>
+                    <path d="m3 8 9 5 9-5M12 13v8"/>
+                </svg>
+                <span class="nav-label">ModVault</span>
+            </button>
+
+            <span class="muh-nav-sep" aria-hidden="true"></span>
+
+            <button type="button" class="muh-nav-item muh-nav-item-action" onclick="openMuhChat()" title="Chat AI" aria-label="Chat AI">
+                <svg viewBox="0 0 24 24" aria-hidden="true">
+                    <path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/>
+                </svg>
+                <span class="nav-label">Chat</span>
+            </button>
+
+            <button type="button" class="muh-nav-item muh-nav-item-action" onclick="openFeedbackModal()" title="Kritik & Saran" aria-label="Kritik & Saran">
+                <svg viewBox="0 0 24 24" aria-hidden="true">
+                    <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/>
+                    <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/>
+                </svg>
+                <span class="nav-label">Kritik</span>
+            </button>
+
+            <a href="https://saweria.co/Bayyyyqt" target="_blank" rel="noopener noreferrer" class="muh-nav-item muh-nav-item-action" title="Dukung Project" aria-label="Dukung Project">
+                <svg viewBox="0 0 24 24" aria-hidden="true">
+                    <path d="M18 8h1a4 4 0 0 1 0 8h-1"/>
+                    <path d="M2 8h16v9a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4V8z"/>
+                    <path d="M6 1v3M10 1v3M14 1v3"/>
+                </svg>
+                <span class="nav-label">Dukung</span>
+            </a>
+        </div>
+
+        <div class="muh-nav-lang" role="group" aria-label="Pilih bahasa">
+            <button class="lang-btn active" onclick="changeLanguage('id')" id="langIdBtn" aria-pressed="true">ID</button>
+            <button class="lang-btn" onclick="changeLanguage('en')" id="langEnBtn" aria-pressed="false">EN</button>
+        </div>
+    </nav>
+
+    <!-- Modal feedback -->
+    <div id="feedbackModal" class="modal-overlay hidden" onclick="if (event.target === this) closeFeedbackModal();">
+        <div class="modal-content" role="dialog" aria-modal="true" aria-labelledby="feedbackModalTitle">
+            <h3 id="feedbackModalTitle">Kritik & Saran</h3>
+            <p>Masukan lu sangat berharga buat ngembangin web ini.</p>
+
+            <input type="text" id="fbUsername" placeholder="Nama / Username (Boleh dikosongin)" class="custom-input">
+            <textarea id="fbMessage" placeholder="Tulis kritik atau saran lu di sini..." rows="4" class="custom-input"></textarea>
+
+            <div class="modal-actions">
+                <button onclick="closeFeedbackModal()" class="btn-back">Batal</button>
+                <button onclick="submitFeedback()" class="btn-primary">Kirim</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+    <script
+        src="/widget.js"
+        data-api="/api/chat"
+        data-title="Asisten Goomys"
+        data-greeting="Selamat datang di Minecraft Utility Hub. Silakan tanya soal fitur website atau modpack."
+    ></script>
+</body>
+</html>
