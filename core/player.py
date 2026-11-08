@@ -7,16 +7,13 @@ import logging
 from urllib.parse import quote
 from flask import Blueprint, jsonify, Response
 
-# HTTP client yang bisa impersonate TLS fingerprint browser
 from curl_cffi import requests as curl_requests
 
 player_bp = Blueprint('player_bp', __name__)
 
 USERNAME_REGEX = re.compile(r'^[a-zA-Z0-9_]{3,16}$')
 UUID_REGEX = re.compile(r'^[a-zA-Z0-9-]{32,36}$')
-STEVE_UUID = "8667ba71b85a4004af54457a9734eed7"
 
-# Session dengan impersonate Chrome — bypass Cloudflare TLS fingerprint
 SESSION = curl_requests.Session(impersonate="chrome")
 
 _cache, _CACHE_TTL = {}, 60
@@ -62,10 +59,6 @@ def make_headers(referer: str, origin: str = None) -> dict:
     return h
 
 
-# ============================================================
-# Mojang Profile Lookup
-# ============================================================
-
 def _fetch_profile(url):
     """Coba satu endpoint profile lookup. Return (uuid, name) atau (None, None)."""
     try:
@@ -96,13 +89,11 @@ def get_player_profile(username):
             f"https://api.minecraftservices.com/minecraft/profile/lookup/name/{username}"
         )
 
+    if len(_profile_cache) > 5000:
+        _profile_cache.clear()
     _profile_cache[key] = (time.time(), result)
     return result
 
-
-# ============================================================
-# Skin Data
-# ============================================================
 
 def get_skin_data(uuid):
     key = uuid.lower()
@@ -136,13 +127,11 @@ def get_skin_data(uuid):
     except Exception as e:
         logging.warning(f"Gagal ambil skin resmi untuk UUID {uuid}: {e}")
 
+    if len(_skin_cache) > 5000:
+        _skin_cache.clear()
     _skin_cache[key] = (time.time(), result)
     return result
 
-
-# ============================================================
-# Tier Parsing
-# ============================================================
 
 def clean_rank(mode_key, value):
     if value is None:
@@ -235,7 +224,6 @@ def parse_tiers(data, icontier):
         "https://assets.mcasset.cloud/1.21/assets/minecraft/textures/item/barrier.png",
     )
 
-    # Format 1: rankings dict — common di MCTiers v2
     if isinstance(rankings, dict):
         for mode, info in rankings.items():
             if not isinstance(info, dict):
@@ -244,7 +232,12 @@ def parse_tiers(data, icontier):
             if tier_num is None:
                 continue
             pos = info.get("pos", info.get("position"))
-            prefix = "HT" if pos == 0 else "LT"
+            if pos == 0:
+                prefix = "HT"
+            elif pos is None:
+                prefix = "T"
+            else:
+                prefix = "LT"
             m_key = ALIASES.get(mode.lower(), mode.lower())
             results.append({
                 "mode": NAMES.get(m_key, m_key.upper()),
@@ -253,7 +246,6 @@ def parse_tiers(data, icontier):
             })
         return results
 
-    # Format 2: mode -> info langsung
     for mode, info in find_modes(payload).items():
         rank = clean_rank(mode, info)
         if not rank:
@@ -266,10 +258,6 @@ def parse_tiers(data, icontier):
         })
     return results
 
-
-# ============================================================
-# Tier Fetching
-# ============================================================
 
 def get_tier_data(provider, username, history=None):
     p_id = provider["id"]
@@ -295,13 +283,11 @@ def get_tier_data(provider, username, history=None):
     if not results and fallback_id and history and fallback_id in history:
         results = history[fallback_id]
 
+    if len(_cache) > 5000:
+        _cache.clear()
     _cache[cache_key] = (time.time(), results)
     return results
 
-
-# ============================================================
-# Routes
-# ============================================================
 
 @player_bp.route("/api/download-skin/<uuid>", methods=["GET"])
 def download_skin(uuid):
@@ -328,8 +314,10 @@ def track(username):
         return jsonify({"error": "Invalid username format"}), 400
 
     uuid_raw, official_name = get_player_profile(username)
+    if not uuid_raw:
+        return jsonify({"error": "Player tidak ditemukan"}), 404
     target_name = official_name or username
-    target_uuid = uuid_raw or STEVE_UUID
+    target_uuid = uuid_raw
 
     tier_sources, history = [], {}
     for p in load_providers():

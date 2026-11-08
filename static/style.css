@@ -1,7 +1,3 @@
-/* ==========================================================================
-   Minecraft Utility Hub — style.css
-   ========================================================================== */
-
 :root {
     color-scheme: dark;
 
@@ -53,7 +49,6 @@
     --ring: 0 0 0 3px rgba(249, 115, 22, 0.16);
 }
 
-/* Base */
 * {
     box-sizing: border-box;
     margin: 0;
@@ -101,7 +96,6 @@ body {
     display: none !important;
 }
 
-/* Background */
 .bg-glow-container {
     position: fixed;
     inset: 0;
@@ -144,7 +138,6 @@ body {
     background: radial-gradient(circle, var(--amber-gold) 0%, var(--deep-amber) 100%);
 }
 
-/* Animasi */
 @keyframes screenFadeIn {
     from { opacity: 0; transform: translateY(14px) scale(0.985); }
     to { opacity: 1; transform: none; }
@@ -190,9 +183,6 @@ body {
     to { opacity: 1; transform: none; }
 }
 
-/* ============================================================
-   Nav fixed bawah — pill glass, ukuran besar
-   ============================================================ */
 .muh-nav {
     position: fixed;
     bottom: max(18px, calc(env(safe-area-inset-bottom, 0px) + 10px));
@@ -265,7 +255,6 @@ body {
     min-width: 0;
 }
 
-/* Nav item — icon-only default, expand on hover/active */
 .muh-nav-item {
     display: inline-flex;
     align-items: center;
@@ -323,7 +312,6 @@ body {
     margin: 0 5px;
 }
 
-/* State: active */
 .muh-nav-item.active {
     color: var(--amber-gold);
     background-color: rgba(245, 185, 66, 0.13);
@@ -349,7 +337,6 @@ body {
     margin-left: 7px;
 }
 
-/* Lang switcher */
 .muh-nav-lang {
     display: inline-flex;
     align-items: center;
@@ -380,9 +367,6 @@ body {
     box-shadow: 0 2px 10px rgba(249, 115, 22, 0.4);
 }
 
-/* ============================================================
-   Home — pure hero (tanpa hint)
-   ============================================================ */
 .home-hero {
     display: flex;
     flex-direction: column;
@@ -430,9 +414,6 @@ body {
     animation: screenFadeIn 0.7s var(--ease-spring) 0.4s both;
 }
 
-/* ============================================================
-   Screen & panel
-   ============================================================ */
 .app-screen {
     width: 100%;
     flex: 1;
@@ -442,7 +423,6 @@ body {
     animation: screenFadeIn 0.4s var(--ease-spring) both;
 }
 
-/* Override khusus yang layout-nya sudah punya struktur sendiri */
 #modpackScreen.app-screen,
 #dashboardScreen.app-screen {
     justify-content: flex-start;
@@ -677,7 +657,6 @@ h3 {
     flex-shrink: 0;
 }
 
-/* Input & form */
 .input-group-large {
     display: flex;
     gap: 8px;
@@ -830,7 +809,6 @@ h3 {
     color: var(--text-primary);
 }
 
-/* ModVault */
 .modvault-panel {
     max-width: 680px;
     margin: 0 auto;
@@ -1171,7 +1149,6 @@ h3 {
     transform: scale(0.85);
 }
 
-/* Dashboard */
 .header-dashboard {
     display: flex;
     justify-content: space-between;
@@ -1609,7 +1586,6 @@ h3 {
     flex-shrink: 0;
 }
 
-/* Footer */
 .app-footer {
     text-align: center;
     padding: 16px 12px 0;
@@ -1622,7 +1598,6 @@ h3 {
     line-height: 1.5;
 }
 
-/* Modal */
 .modal-overlay {
     position: fixed;
     inset: 0;
@@ -1694,7 +1669,6 @@ h3 {
     text-align: center;
 }
 
-/* Hover */
 @media (hover: hover) {
     .muh-nav-brand:hover {
         transform: scale(1.08);
@@ -1763,7 +1737,6 @@ h3 {
     .muh-nav-item:hover .nav-label { opacity: 1; margin-left: 7px; }
 }
 
-/* Responsive */
 @media (max-width: 680px) {
     .panel { padding: 22px; border-radius: 20px; }
     .dashboard-grid { grid-template-columns: 1fr; }
@@ -1773,7 +1746,6 @@ h3 {
     .modvault-panel,
     .center-panel { margin: 0 auto; }
 
-    /* Nav mobile — masih besar, tapi proporsional */
     .muh-nav { padding: 6px; gap: 5px; }
     .muh-nav-brand { width: 38px; height: 38px; }
     .muh-nav-brand svg { width: 21px; height: 21px; }
@@ -1838,7 +1810,6 @@ h3 {
     .muh-nav-sep { display: none; }
 }
 
-/* Aksesibilitas */
 button,
 input,
 label,
@@ -1888,4 +1859,88 @@ textarea,
         transition-duration: 0.001ms !important;
         scroll-behavior: auto !important;
     }
+}
+
+.btn-primary {
+    position: relative;
+    overflow: hidden;
+}
+
+.btn-primary::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    background: linear-gradient(105deg, transparent 38%, rgba(255, 255, 255, 0.42) 50%, transparent 62%);
+    transform: translateX(-130%);
+    transition: transform 0.65s var(--ease-out-expo);
+}
+
+.btn-primary:disabled,
+.btn-back:disabled {
+    opacity: 0.45;
+    cursor: not-allowed;
+    transform: none;
+    box-shadow: none;
+}
+
+.lang-btn:active {
+    transform: scale(0.94);
+}
+
+.preset-card,
+.tier-card,
+.provider-block {
+    animation: itemIn 0.35s var(--ease-out-expo) both;
+}
+
+.preset-card:nth-child(2),
+.tier-card:nth-child(2),
+.provider-block:nth-child(2) { animation-delay: 45ms; }
+
+.preset-card:nth-child(3),
+.tier-card:nth-child(3),
+.provider-block:nth-child(3) { animation-delay: 90ms; }
+
+.preset-card:nth-child(4),
+.tier-card:nth-child(4),
+.provider-block:nth-child(4) { animation-delay: 135ms; }
+
+.preset-card:nth-child(5),
+.tier-card:nth-child(5),
+.provider-block:nth-child(5) { animation-delay: 180ms; }
+
+.preset-card:nth-child(6),
+.tier-card:nth-child(6),
+.provider-block:nth-child(6) { animation-delay: 225ms; }
+
+.preset-card:nth-child(7),
+.tier-card:nth-child(7),
+.provider-block:nth-child(7) { animation-delay: 270ms; }
+
+.preset-card:nth-child(n+8),
+.tier-card:nth-child(n+8),
+.provider-block:nth-child(n+8) { animation-delay: 315ms; }
+
+.preset-icon,
+.item-icon,
+.external-icon {
+    transition: transform 0.3s var(--ease-spring);
+}
+
+@keyframes orbDrift {
+    0%, 100% { transform: translate3d(0, 0, 0); }
+    50% { transform: translate3d(18px, -22px, 0); }
+}
+
+.orb-twilight { animation: orbDrift 18s ease-in-out infinite; }
+.orb-sunset { animation: orbDrift 22s ease-in-out infinite reverse; }
+
+@media (hover: hover) {
+    .btn-primary:not(:disabled):hover::after { transform: translateX(130%); }
+
+    .preset-card:hover .preset-icon { transform: translateY(-2px) scale(1.06); }
+    .tier-card:hover .item-icon { transform: scale(1.14); }
+    .link-item:hover .external-icon { transform: translate(2px, -2px); }
+    .mod-search-item:has(.mod-search-icon):hover { transform: translateX(2px); }
 }

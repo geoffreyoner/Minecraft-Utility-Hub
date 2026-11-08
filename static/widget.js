@@ -10,9 +10,7 @@
   var GREETING = (script && script.getAttribute && script.getAttribute("data-greeting")) ||
     "Selamat datang di Minecraft Utility Hub. Silakan tanya soal fitur website atau modpack.";
 
-  // Delay minimum sebelum mulai nampilin jawaban (ms)
   var MIN_THINK_MS = 600;
-  // Delay per karakter (ms) — bikin jawaban muncul bertahap walau upstream nge-burst
   var CHAR_DELAY_MS = 12;
 
   window.MUHChat = window.MUHChat || {
@@ -55,7 +53,6 @@
       '.muh-chat-msg.user{background:linear-gradient(135deg,#f97316 0%,#f0a63a 100%);color:#1a0f00;font-weight:600;margin-left:auto;border-bottom-right-radius:4px;}',
       '.muh-chat-msg.bot{background:rgba(255,255,255,.04);color:#f7f2ea;border:1px solid rgba(255,255,255,.06);border-bottom-left-radius:4px;}',
 
-      // Typing indicator: 3 dot animasi
       '.muh-chat-msg.bot.typing{padding:14px 18px;display:inline-flex;align-items:center;gap:5px;}',
       '.muh-chat-msg.bot.typing .t-dot{width:6px;height:6px;border-radius:50%;background:#f97316;display:inline-block;opacity:.4;animation:muhTypingBounce 1.3s ease-in-out infinite;}',
       '.muh-chat-msg.bot.typing .t-dot:nth-child(2){animation-delay:.18s;}',
@@ -123,7 +120,6 @@
       return el;
     }
 
-    // Typing indicator: 3 dot animasi
     function addTypingIndicator() {
       var el = document.createElement("div");
       el.className = "muh-chat-msg bot typing";
@@ -179,33 +175,29 @@
       history.push({ role: "user", content: text });
       suggest.classList.add("hidden");
 
-      // Tampilkan typing indicator dulu
       var typingEl = addTypingIndicator();
       sendBtn.disabled = true;
 
       var startedAt = performance.now();
       var botEl = null;
       var full = "";
-      var queue = [];        // buffer karakter yang belum ditampilin
-      var displayed = 0;     // index karakter yang udah ditampilin
+      var queue = [];
+      var displayed = 0;
       var streamDone = false;
       var typingRaf = null;
       var typingTick = null;
 
-      // Render karakter dari queue pakai interval
       function startRenderLoop() {
         if (typingTick) return;
         typingTick = setInterval(function () {
-          // Ambil dari queue sesuai kecepatan
           while (queue.length > 0) {
             var ch = queue.shift();
             full += ch;
             displayed++;
             if (botEl) botEl.textContent = full;
             log.scrollTop = log.scrollHeight;
-            if (CHAR_DELAY_MS > 0) break; // 1 char per tick
+            if (CHAR_DELAY_MS > 0) break;
           }
-          // Kalau stream udah selesai & queue kosong, stop loop
           if (streamDone && queue.length === 0) {
             clearInterval(typingTick);
             typingTick = null;
@@ -214,7 +206,6 @@
         }, Math.max(CHAR_DELAY_MS, 8));
       }
 
-      // Ganti typing indicator jadi bubble bot kosong, begitu chunk pertama siap
       function prepareBotBubble() {
         if (botEl) return;
         if (typingEl && typingEl.parentNode) typingEl.parentNode.removeChild(typingEl);
@@ -261,7 +252,6 @@
               var json = JSON.parse(payload);
               var delta = (json.choices && json.choices[0] && json.choices[0].delta && json.choices[0].delta.content) || "";
               if (delta) {
-                // Pas chunk pertama datang, tunggu minimal MIN_THINK_MS biar typing keliatan
                 if (!firstChunkAt) {
                   firstChunkAt = performance.now();
                   var elapsed = firstChunkAt - startedAt;
@@ -271,7 +261,6 @@
                   }
                   prepareBotBubble();
                 }
-                // Push karakter ke queue
                 for (var k = 0; k < delta.length; k++) {
                   queue.push(delta[k]);
                 }
@@ -283,7 +272,6 @@
 
         streamDone = true;
         if (!typingTick) {
-          // Kalau stream cepet & queue langsung kosong
           onStreamComplete();
         }
       } catch (err) {

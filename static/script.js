@@ -38,7 +38,6 @@ function openMuhChat() {
 }
 window.openMuhChat = openMuhChat;
 
-// Terjemahan
 async function loadTranslations() {
     try {
         const response = await fetch('lang.json');
@@ -84,7 +83,6 @@ function changeLanguage(lang) {
     });
 }
 
-// Screen navigation + back button
 let currentScreen = 'welcomeScreen';
 const SCREEN_TITLES = {
     welcomeScreen: 'Minecraft Utility Hub',
@@ -103,7 +101,6 @@ function applyScreen(screenId) {
     currentScreen = screenId;
     window.scrollTo(0, 0);
 
-    // Highlight nav item yang aktif
     document.querySelectorAll('.muh-nav-item[data-nav]').forEach(el => {
         el.classList.toggle('active', el.getAttribute('data-nav') === screenId);
     });
@@ -123,7 +120,6 @@ window.addEventListener('popstate', (e) => {
 
 history.replaceState({ screen: 'welcomeScreen' }, '', location.pathname);
 
-// Skin viewer 3D
 let skinViewer = null;
 let autoRotateActive = false;
 
@@ -210,7 +206,6 @@ document.addEventListener('DOMContentLoaded', () => {
     loadModpackPresets();
 });
 
-// Tier toggle
 const tierToggle = document.getElementById('tierToggle');
 const tierProviders = document.getElementById('tierProviders');
 
@@ -235,7 +230,6 @@ if (tierToggle) {
     });
 }
 
-// Copy UUID
 const uuidBtn = document.getElementById('playerUuid');
 const uuidTextEl = document.getElementById('uuidText');
 if (uuidBtn && uuidTextEl) {
@@ -255,7 +249,6 @@ if (uuidBtn && uuidTextEl) {
     });
 }
 
-// Warna tier
 function getTierColor(rank) {
     const r = rank.toUpperCase();
     if (r.includes('HT1')) return '#ffd166';
@@ -269,7 +262,6 @@ function getTierColor(rank) {
     return '#f97316';
 }
 
-// Cari player
 async function handleLoginAndSearch() {
     if (isSearching) return;
     const usernameInput = document.getElementById('usernameInput');
@@ -358,7 +350,6 @@ async function handleLoginAndSearch() {
     }
 }
 
-// Modpack
 let modpackPresets = [];
 let selectedPresetId = null;
 let modpackDataLoaded = false;
@@ -377,6 +368,27 @@ const downloadSpinner = document.getElementById('downloadSpinner');
 const modSearchInput = document.getElementById('modSearchInput');
 const modSearchResults = document.getElementById('modSearchResults');
 const customModBadgeList = document.getElementById('customModBadgeList');
+
+// Event delegation — data dinamis tidak boleh disusun jadi string onclick (rawan XSS)
+if (presetGrid) {
+    presetGrid.addEventListener('click', (e) => {
+        const card = e.target.closest('.preset-card');
+        if (card && card.dataset.presetId) selectPreset(card.dataset.presetId);
+    });
+}
+if (modSearchResults) {
+    modSearchResults.addEventListener('click', (e) => {
+        const item = e.target.closest('.mod-search-item');
+        if (item && item.dataset.slug) addCustomMod(item.dataset.slug, item.dataset.name || '');
+    });
+}
+if (customModBadgeList) {
+    customModBadgeList.addEventListener('click', (e) => {
+        const removeBtn = e.target.closest('.remove-mod');
+        const badge = removeBtn && removeBtn.closest('.custom-mod-badge');
+        if (badge && badge.dataset.slug) removeCustomMod(badge.dataset.slug);
+    });
+}
 
 async function loadModpackPresets() {
     if (modpackDataLoaded || !presetGrid) return;
@@ -411,7 +423,7 @@ function renderPresetGrid() {
         const iconHtml = rawIcon.trim().startsWith('<svg') ? rawIcon : escapeHtml(rawIcon || '?');
 
         return `
-            <button type="button" class="preset-card" data-preset-id="${escapeHtml(preset.id)}" onclick="selectPreset('${escapeHtml(preset.id)}')">
+            <button type="button" class="preset-card" data-preset-id="${escapeHtml(preset.id)}">
                 <span class="preset-icon">${iconHtml}</span>
                 <span class="preset-name">${escapeHtml(name)}</span>
                 <span class="preset-desc">${escapeHtml(desc)}</span>
@@ -518,7 +530,7 @@ async function fetchModSearchResults(query) {
             modSearchResults.innerHTML = '<div class="mod-search-item"><span class="mod-search-desc">Mod tidak ditemukan atau tidak kompatibel.</span></div>';
         } else {
             modSearchResults.innerHTML = data.results.map(mod => `
-                <div class="mod-search-item" onclick="addCustomMod('${escapeHtml(mod.slug)}', '${escapeHtml(mod.name).replace(/'/g, "\\'")}')">
+                <div class="mod-search-item" data-slug="${escapeHtml(mod.slug)}" data-name="${escapeHtml(mod.name)}">
                     <img src="${mod.icon ? escapeHtml(mod.icon) : FALLBACK_ICON}" class="mod-search-icon" onerror="this.src='${FALLBACK_ICON}'">
                     <div class="mod-search-info"><span class="mod-search-name">${escapeHtml(mod.name)}</span><span class="mod-search-desc">${escapeHtml(mod.desc || '')}</span></div>
                 </div>`).join('');
@@ -551,9 +563,9 @@ function renderCustomMods() {
         return;
     }
     customModBadgeList.innerHTML = customMods.map(mod => `
-        <span class="mod-badge custom-mod-badge">
+        <span class="mod-badge custom-mod-badge" data-slug="${escapeHtml(mod.slug)}">
             <span class="mod-badge-dot" style="background: #34d399; box-shadow: 0 0 8px #34d399;"></span>${escapeHtml(mod.name)}
-            <span class="remove-mod" onclick="removeCustomMod('${escapeHtml(mod.slug)}')">✕</span>
+            <span class="remove-mod">✕</span>
         </span>`).join('');
 }
 
@@ -693,7 +705,6 @@ async function handleModpackDownload() {
     }
 }
 
-// Feedback
 function openFeedbackModal() {
     const modal = document.getElementById('feedbackModal');
     if (modal) modal.classList.remove('hidden');
@@ -738,7 +749,6 @@ async function submitFeedback() {
     }
 }
 
-// Event listener umum
 const inputEl = document.getElementById('usernameInput');
 if (inputEl) {
     inputEl.addEventListener('keypress', function (e) {

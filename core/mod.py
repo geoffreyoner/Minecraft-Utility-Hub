@@ -222,8 +222,14 @@ def download_modpack():
 
     download_list, skipped = [], []
 
-    for mod in all_mods:
+    def fetch_one(mod):
         filename, url = fetch_modrinth_url(mod["slug"], version, loader)
+        return mod, filename, url
+
+    with concurrent.futures.ThreadPoolExecutor(max_workers=6) as executor:
+        results = list(executor.map(fetch_one, all_mods))
+
+    for mod, filename, url in results:
         if filename and url:
             download_list.append({"name": mod["name"], "filename": filename, "url": url})
         else:

@@ -26,7 +26,6 @@
 
     <div class="wrapper">
 
-        <!-- Home — pure hero -->
         <section id="welcomeScreen" class="app-screen">
             <div class="home-hero">
                 <h1 class="brand-title">Minecraft Utility Hub</h1>
@@ -34,7 +33,6 @@
             </div>
         </section>
 
-        <!-- Login / Inspector -->
         <section id="loginScreen" class="app-screen hidden">
             <div class="panel center-panel">
                 <button class="btn-back" onclick="switchScreen('welcomeScreen')">
@@ -62,7 +60,6 @@
             </div>
         </section>
 
-        <!-- ModVault -->
         <section id="modpackScreen" class="app-screen hidden">
             <div class="panel modvault-panel">
                 <button class="btn-back" onclick="switchScreen('welcomeScreen')">
@@ -142,7 +139,6 @@
             </div>
         </section>
 
-        <!-- Dashboard -->
         <section id="dashboardScreen" class="app-screen hidden">
             <header class="header-dashboard">
                 <button class="btn-back" onclick="switchScreen('loginScreen')">
@@ -242,13 +238,11 @@
             </main>
         </section>
 
-        <!-- Footer -->
         <footer class="app-footer">
             <p>&copy; 2026 <strong>Minecraft Utility Hub</strong></p>
         </footer>
     </div>
 
-    <!-- Nav fixed bawah -->
     <nav class="muh-nav" aria-label="Navigasi utama">
         <a href="/" class="muh-nav-brand" onclick="event.preventDefault(); switchScreen('welcomeScreen'); return false;" aria-label="Home">
             <svg viewBox="0 0 32 32" width="24" height="24" aria-hidden="true">
@@ -313,7 +307,6 @@
         </div>
     </nav>
 
-    <!-- Modal feedback -->
     <div id="feedbackModal" class="modal-overlay hidden" onclick="if (event.target === this) closeFeedbackModal();">
         <div class="modal-content" role="dialog" aria-modal="true" aria-labelledby="feedbackModalTitle">
             <h3 id="feedbackModalTitle">Kritik & Saran</h3>

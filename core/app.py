@@ -1,7 +1,7 @@
 import os
 import re
 import requests
-from datetime import datetime
+from datetime import datetime, timezone
 from urllib.parse import quote
 from flask import Flask, send_from_directory, request, jsonify
 from flask_cors import CORS
@@ -12,6 +12,7 @@ load_dotenv()
 from .mod import mod_bp
 from .player import player_bp
 from .chat import chat_bp
+from .ratelimit import client_ip, make_limiter
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 STATIC_DIR = os.path.join(BASE_DIR, 'static')
@@ -30,18 +31,9 @@ CORS(
 CF_SECRET_KEY = os.environ.get("CF_SECRET_KEY")
 DISCORD_WEBHOOK_URL = os.environ.get("DISCORD_WEBHOOK_URL")
 
-# Host yang dianggap lokal — bypass Turnstile pas development
-_LOCAL_HOST_RE = re.compile(
-    r"^(localhost|127\.|192\.168\.|10\.|172\.(1[6-9]|2[0-9]|3[01])\.)"
-)
+TURNSTILE_BYPASS = os.environ.get("TURNSTILE_BYPASS", "false").lower() == "true"
 
-
-def _is_local_request(host: str) -> bool:
-    """Cek host lokal. Regex-anchored, bukan substring — cegah '127.0.0.1.evil.com' lolos."""
-    if not host:
-        return False
-    host_only = host.split(":")[0].lower()
-    return bool(_LOCAL_HOST_RE.match(host_only))
+_feedback_ok = make_limiter(5, 600)
 
 
 @app.before_request
@@ -53,11 +45,9 @@ def verify_turnstile():
     if request.method == "OPTIONS":
         return
 
-    # Bypass lokal buat development
-    if _is_local_request(request.headers.get("Host", "")):
+    if TURNSTILE_BYPASS:
         return
 
-    # Fail-closed: kalau secret belum di-set, tolak
     if not CF_SECRET_KEY:
         return jsonify({"error": "Server misconfigured: CF_SECRET_KEY belum di-set."}), 500
 
@@ -80,6 +70,9 @@ def verify_turnstile():
 
 @app.route('/api/feedback', methods=['POST'])
 def send_feedback():
+    if not _feedback_ok(client_ip(request)):
+        return jsonify({"success": False, "error": "Terlalu banyak kirim masukan. Coba lagi nanti."}), 429
+
     data = request.json or {}
     username = str(data.get('username', 'Anonim')).strip()[:80] or 'Anonim'
     message = str(data.get('message', '')).strip()[:2000]
@@ -106,7 +99,7 @@ def send_feedback():
             "footer": {
                 "text": "Minecraft Utility Hub",
             },
-            "timestamp": datetime.utcnow().isoformat() + "Z",
+            "timestamp": datetime.now(timezone.utc).isoformat(),
         }],
     }
 

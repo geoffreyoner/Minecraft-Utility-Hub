@@ -1,10 +1,10 @@
 import os
 import json
-import time
 import logging
 import requests
-from collections import defaultdict
 from flask import Blueprint, Response, request, stream_with_context
+
+from .ratelimit import client_ip, make_limiter
 
 chat_bp = Blueprint('chat_bp', __name__)
 
@@ -46,20 +46,7 @@ BANNED = [
     'judi', 'slot', 'togel', 'sara', 'rasisme',
 ]
 
-# --- Rate limit sederhana (in-memory) ---
-_rate = defaultdict(list)
-RATE_LIMIT = 20
-RATE_WINDOW = 60
-
-
-def _rate_ok(ip: str) -> bool:
-    now = time.time()
-    bucket = _rate[ip]
-    bucket[:] = [t for t in bucket if now - t < RATE_WINDOW]
-    if len(bucket) >= RATE_LIMIT:
-        return False
-    bucket.append(now)
-    return True
+_rate_ok = make_limiter(20, 60)
 
 
 def _sse_chunk(text: str) -> str:
@@ -85,8 +72,7 @@ def chat():
     if request.method == "OPTIONS":
         return ("", 204)
 
-    ip = (request.headers.get("X-Forwarded-For", "").split(",")[0].strip()
-          or request.remote_addr or "unknown")
+    ip = client_ip(request)
     if not _rate_ok(ip):
         return _stream_fallback("Terlalu banyak pertanyaan. Coba lagi sebentar.")
 

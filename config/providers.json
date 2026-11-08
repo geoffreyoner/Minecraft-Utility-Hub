@@ -2,17 +2,17 @@
   "providers": [
     {
       "id": "mctiers",
-      "name": "MCTiers (mctiers.com)",
-      "url": "https://mctiers.com/api/player/{username}",
-      "referer": "https://mctiers.com/",
-      "origin": "https://mctiers.com",
+      "name": "MCTiers",
+      "url": "https://mctiers.net/api/v2/profile/by-name/{username}",
+      "referer": "https://mctiers.net/",
+      "origin": "https://mctiers.net",
       "timeout": 8,
       "fallback_to": null
     },
     {
       "id": "pvptiers",
       "name": "PvPTiers (pvptiers.com)",
-      "url": "https://pvptiers.com/api/player/{username}",
+      "url": "https://pvptiers.com/api/search_profile/{username}",
       "referer": "https://pvptiers.com/",
       "origin": "https://pvptiers.com",
       "timeout": 8,
